@@ -2,14 +2,11 @@
 
 #define LOG_TAG "PRFMultas"
 
-#define LOGI(...) __android_log_print(
-    ANDROID_LOG_INFO,
-    LOG_TAG,
-    __VA_ARGS__
-)
-
-extern "C"
-void PRFMultasInit()
+extern "C" void PRFMultasInit()
 {
-    LOGI("PRF Multas Mod iniciado!");
+    __android_log_print(
+        ANDROID_LOG_INFO,
+        LOG_TAG,
+        "PRF Multas Mod iniciado!"
+    );
 }
