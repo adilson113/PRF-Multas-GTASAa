@@ -15,5 +15,5 @@ ON_MOD_PRELOAD()
 
 ON_MOD_LOAD()
 {
-    aml->ShowToast(false, "PRF MULTAS MOD ATIVO");
+    aml->Log("PRF MULTAS MOD CARREGADO COM SUCESSO");
 }
