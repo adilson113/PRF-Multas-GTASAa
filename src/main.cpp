@@ -1,12 +1,25 @@
-#include <android/log.h>
+#include <mod/amlmod.h>
+#include <mod/logger.h>
 
-#define LOG_TAG "PRFMultas"
+MYMOD(
+    com.prf.multas,
+    PRF Multas,
+    1.0,
+    Adilson
+)
 
-extern "C" void PRFMultasInit()
+NEEDGAME(com.rockstargames.gtasa)
+
+ON_MOD_PRELOAD()
 {
-    __android_log_print(
-        ANDROID_LOG_INFO,
-        LOG_TAG,
-        "PRF Multas Mod iniciado!"
-    );
+    logger->SetTag("PRF Multas");
+}
+
+ON_MOD_LOAD()
+{
+    logger->Info("================================");
+    logger->Info("PRF MULTAS MOD CARREGADO!");
+    logger->Info("GTA San Andreas detectado");
+    logger->Info("Sistema iniciado com sucesso");
+    logger->Info("================================");
 }
