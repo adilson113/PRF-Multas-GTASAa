@@ -1,4 +1,5 @@
 #include <mod/amlmod.h>
+#include <unistd.h>
 
 MYMOD(
     com.adilson.prfmultas,
@@ -9,11 +10,26 @@ MYMOD(
 
 NEEDGAME(com.rockstargames.gtasa)
 
-ON_MOD_PRELOAD()
+void* ShowMessage(void*)
 {
+    sleep(5);
+
+    aml->ShowToast(
+        true,
+        "PRF MULTAS MOD CARREGADO!"
+    );
+
+    return nullptr;
 }
 
 ON_MOD_LOAD()
 {
-    aml->ShowToast(false, "PRF MULTAS MOD CARREGADO!");
+    pthread_t thread;
+
+    pthread_create(
+        &thread,
+        nullptr,
+        ShowMessage,
+        nullptr
+    );
 }
