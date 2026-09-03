@@ -1,8 +1,9 @@
-name: Build PRF Multas
+name: Build PRF Multas AML
 
 on:
   push:
     branches: [ main ]
+
   workflow_dispatch:
 
 jobs:
@@ -10,37 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Baixar projeto
         uses: actions/checkout@v4
 
-      - name: Preparar Java
-        uses: actions/setup-java@v4
+      - name: Baixar arquivos AML
+        run: |
+          git clone --depth 1 https://github.com/RusJJ/AndroidModLoader.git aml-temp
+          mkdir -p include
+          cp -r aml-temp/mod include/
+
+      - name: Instalar Android NDK
+        uses: nttld/setup-ndk@v1
         with:
-          distribution: temurin
-          java-version: '17'
+          ndk-version: r25c
 
-      - name: Preparar Android
-        uses: android-actions/setup-android@v3
-
-      - name: Instalar NDK
+      - name: Compilar mod AML
         run: |
-          yes | sdkmanager --licenses
-          sdkmanager "ndk;25.2.9519653"
-
-      - name: Compilar mod
-        run: |
-          cmake -S . -B build \
-            -DCMAKE_SYSTEM_NAME=Android \
-            -DCMAKE_SYSTEM_VERSION=21 \
-            -DANDROID_ABI=armeabi-v7a \
-            -DANDROID_NDK=$ANDROID_HOME/ndk/25.2.9519653 \
-            -DCMAKE_BUILD_TYPE=Release
-
-          cmake --build build
+          ndk-build \
+            NDK_PROJECT_PATH=. \
+            APP_BUILD_SCRIPT=./Android.mk \
+            NDK_APPLICATION_MK=./Application.mk
 
       - name: Salvar arquivo compilado
         uses: actions/upload-artifact@v4
         with:
-          name: PRFMultas-ARMv7
-          path: build/libPRFMultas.so
-          if-no-files-found: error
+          name: PRFMultas-AML
+          path: libs/armeabi-v7a/libPRFMultas.so
