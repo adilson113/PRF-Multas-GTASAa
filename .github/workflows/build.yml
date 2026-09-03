@@ -1,0 +1,46 @@
+name: Build PRF Multas
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Preparar Android
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar NDK
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "ndk;25.2.9519653"
+
+      - name: Compilar mod
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_SYSTEM_NAME=Android \
+            -DCMAKE_SYSTEM_VERSION=21 \
+            -DANDROID_ABI=armeabi-v7a \
+            -DANDROID_NDK=$ANDROID_HOME/ndk/25.2.9519653 \
+            -DCMAKE_BUILD_TYPE=Release
+
+          cmake --build build
+
+      - name: Salvar arquivo compilado
+        uses: actions/upload-artifact@v4
+        with:
+          name: PRFMultas-ARMv7
+          path: build/libPRFMultas.so
+          if-no-files-found: error
