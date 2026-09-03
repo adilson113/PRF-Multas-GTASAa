@@ -15,5 +15,6 @@ ON_MOD_PRELOAD()
 
 ON_MOD_LOAD()
 {
-    aml->Log("PRF MULTAS MOD CARREGADO COM SUCESSO");
+    aml->DoVibro(100);
+    aml->ShowToast(true, "PRF MULTAS MOD CARREGADO!");
 }
